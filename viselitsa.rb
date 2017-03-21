@@ -32,7 +32,7 @@ words_file_name = current_path + "/data/words.txt"
 
 game = Game.new(word_reader.read_from_file(words_file_name))
 
-while game.status == 0
+while game.status.zero?
   printer.print_status(game)
   game.ask_next_letter
 end
