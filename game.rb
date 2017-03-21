@@ -13,49 +13,55 @@ class Game
 
   def get_letters(slovo)
     if slovo == nil || slovo == ""
-      abort "Загадано пустое слово, нечего отгадывать. Закрываемся"
+      abort "Задано пустое слово, не о чем играть. Закрываемся."
+    else
+      slovo = slovo.encode("UTF-8")
     end
 
-    slovo = UnicodeUtils.upcase(slovo.encode('UTF-8'))
-
-    return slovo.split("")
+    UnicodeUtils.upcase(slovo).split('')
   end
 
   def status
-    return @status
+    @status
   end
 
   def next_step(bukva)
     bukva = UnicodeUtils.upcase(bukva)
 
-    if @status == -1 || @status == 1
-      return
-    end
+    return if @status == -1 || @status == 1
+    return if @good_letters.include?(bukva) || @bad_letters.include?(bukva)
 
-    if @good_letters.include?(bukva) || @bad_letters.include?(bukva)
-      return
-    end
-
-    if @letters.include?(bukva)
+    if @letters.include?(bukva) ||
+       (bukva == "Е" && @letters.include?("Ё")) ||
+       (bukva == "Ё" && @letters.include?("Е")) ||
+       (bukva == "И" && @letters.include?("Й")) ||
+       (bukva == "Й" && @letters.include?("И"))
       @good_letters << bukva
 
-      if @good_letters.uniq.sort == @letters.uniq.sort
-        @status = 1
-      end
+      @good_letters << "Й" if bukva == "И"
+      @good_letters << "И" if bukva == "Й"
+      @good_letters << "Ё" if bukva == "Е"
+      @good_letters << "Е" if bukva == "Ё"
+
+      @status = 1 if (@letters - @good_letters).empty?
     else
       @bad_letters << bukva
+
+      @bad_letters << "Й" if bukva == "И"
+      @bad_letters << "И" if bukva == "Й"
+      @bad_letters << "Ё" if bukva == "Е"
+      @bad_letters << "Е" if bukva == "Ё"
+
       @errors += 1
 
-      if @errors >= 7
-        @status = -1
-      end
+      @status = -1 if @errors >= 7
     end
   end
 
   def ask_next_letter
     puts "\nВведите следующую букву"
-
     letter = ""
+
     while letter == ""
       letter = STDIN.gets.encode("UTF-8").chomp
     end

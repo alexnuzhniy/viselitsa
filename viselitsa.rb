@@ -13,11 +13,13 @@ if Gem.win_platform?
   end
 end
 
-require "unicode_utils"
+require 'unicode_utils/upcase'
 
-require_relative "game"
-require_relative "result_printer"
-require_relative "word_reader"
+current_path = File.dirname(__FILE__)
+
+require current_path + "/game.rb"
+require current_path + "/result_printer.rb"
+require current_path + "/word_reader.rb"
 
 puts "Игра виселица. Версия 4. (c) goodprogrammer.ru\n\n"
 sleep 1
@@ -26,7 +28,7 @@ printer = ResultPrinter.new
 
 word_reader = WordReader.new
 
-words_file_name = File.dirname(__FILE__) + "/data/words.txt"
+words_file_name = current_path + "/data/words.txt"
 
 game = Game.new(word_reader.read_from_file(words_file_name))
 

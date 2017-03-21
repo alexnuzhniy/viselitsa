@@ -1,6 +1,8 @@
 # encoding: utf-8
 #
-# Класс ResultPrinter, печатающий состояние и результаты игры.
+# Класс ResultPrinter, печатающий состояние и результаты игры. В этой версии
+# игры мы будем считывать картинки каждого из состояний виселицы из файлов в
+# папке image.
 class ResultPrinter
   def initialize
     @status_image = []
@@ -11,12 +13,11 @@ class ResultPrinter
     while counter <= 7
       file_name = current_path + "/image/#{counter}.txt"
 
-      # https://ruby-doc.org/core-2.4.0/SystemCallError.html
-      begin
-        file = File.new(file_name, "r:UTF-8")
-        @status_image << file.read
-        file.close
-      rescue SystemCallError
+      if File.exist?(file_name)
+        f = File.new(file_name, "r:UTF-8")
+        @status_image << f.read
+        f.close
+      else
         @status_image << "\n [ изображение не найдено ] \n"
       end
 
@@ -30,22 +31,18 @@ class ResultPrinter
 
   def print_status(game)
     cls
+    puts "\nСлово: #{get_word_for_print(game.letters, game.good_letters)}"
 
-    puts
-    puts "Слово: #{get_word_for_print(game.letters, game.good_letters)}"
-    puts "Ошибки: #{game.bad_letters.join(", ")}"
+    puts "\nОшибки: #{game.bad_letters.join(", ")}"
 
     print_viselitsa(game.errors)
 
     if game.status == -1
-      puts
-      puts "Вы проиграли :("
+      puts "\nВы проиграли :(\n"
       puts "Загаданное слово было: " + game.letters.join("")
       puts
     elsif game.status == 1
-      puts
-      puts "Поздравляем, вы выиграли!"
-      puts
+      puts "Поздравляем, вы выиграли!\n\n"
     else
       puts "У вас осталось ошибок: " + (7 - game.errors).to_s
     end
@@ -62,10 +59,10 @@ class ResultPrinter
       end
     end
 
-    return result
+    result
   end
 
   def cls
-    system("clear") || system("cls")
+    system("clear") && system("cls")
   end
 end
