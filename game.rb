@@ -25,6 +25,13 @@ class Game
     @status
   end
 
+  def check_for_double_letter(array, bukva)
+    array << "Й" if bukva == "И"
+    array << "И" if bukva == "Й"
+    array << "Ё" if bukva == "Е"
+    array << "Е" if bukva == "Ё"
+  end
+
   def next_step(bukva)
     bukva = UnicodeUtils.upcase(bukva)
 
@@ -38,19 +45,13 @@ class Game
        (bukva == "Й" && @letters.include?("И"))
       @good_letters << bukva
 
-      @good_letters << "Й" if bukva == "И"
-      @good_letters << "И" if bukva == "Й"
-      @good_letters << "Ё" if bukva == "Е"
-      @good_letters << "Е" if bukva == "Ё"
+      check_for_double_letter(@good_letters, bukva)
 
       @status = 1 if (@letters - @good_letters).empty?
     else
       @bad_letters << bukva
 
-      @bad_letters << "Й" if bukva == "И"
-      @bad_letters << "И" if bukva == "Й"
-      @bad_letters << "Ё" if bukva == "Е"
-      @bad_letters << "Е" if bukva == "Ё"
+      check_for_double_letter(@bad_letters, bukva)
 
       @errors += 1
 

@@ -8,10 +8,9 @@ class ResultPrinter
     @status_image = []
 
     current_path = File.dirname(__FILE__)
-    counter = 0
 
-    while counter <= 7
-      file_name = current_path + "/image/#{counter}.txt"
+    (0..7).each do |number|
+      file_name = current_path + "/image/#{number}.txt"
 
       if File.exist?(file_name)
         f = File.new(file_name, "r:UTF-8")
@@ -20,8 +19,6 @@ class ResultPrinter
       else
         @status_image << "\n [ изображение не найдено ] \n"
       end
-
-      counter += 1
     end
   end
 

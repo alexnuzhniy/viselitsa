@@ -17,9 +17,9 @@ require 'unicode_utils/upcase'
 
 current_path = File.dirname(__FILE__)
 
-require current_path + "/game.rb"
-require current_path + "/result_printer.rb"
-require current_path + "/word_reader.rb"
+require_relative "game.rb"
+require_relative "result_printer.rb"
+require_relative "word_reader.rb"
 
 puts "Игра виселица. Версия 4. (c) goodprogrammer.ru\n\n"
 sleep 1
