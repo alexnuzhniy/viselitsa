@@ -9,7 +9,7 @@ class ResultPrinter
 
     current_path = File.dirname(__FILE__)
 
-    (0..7).each do |number|
+    8.times do |number|
       file_name = current_path + "/image/#{number}.txt"
 
       if File.exist?(file_name)
